@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+	<title>Jantz TV</title>
+
+	<meta name="description" content="A retro channel surfing app for watching long videos from Jantz's favorite YouTube channels." />
+	<meta name="theme-color" content="#0a0a0a" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="apple-mobile-web-app-title" content="Jantz TV" />
+
+	<meta property="og:title" content="Jantz TV" />
+	<meta property="og:description" content="Relax and watch some videos buddy!" />
+	<meta property="og:image" content="https://jantzmorgan.github.io/Jantz-TV-/piped/icon-512.PNG" />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://jantzmorgan.github.io/Jantz-TV-/piped/" />
+
+	<link rel="manifest" href="manifest.json" />
+	<link rel="icon" type="image/png" href="icon-192.PNG" />
+	<link rel="shortcut icon" type="image/png" href="icon-192.PNG" />
+	<link rel="apple-touch-icon" href="icon-192.PNG" />
+
+	<link rel="stylesheet" href="style.css?v=4" />
+
+	<script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+</head>
+
+<body>
+	<div class="app">
+
+		<header class="top-bar">
+			<div class="brand-block">
+				<img class="app-logo" src="icon-192.PNG" alt="Jantz TV logo" />
+
+				<div>
+					<h1>Jantz TV</h1>
+					<p id="screenSubtitle">Latest long videos from your channels.</p>
+				</div>
+			</div>
+
+			<div class="channel-display">
+				<span id="channelNumber">HOME</span>
+			</div>
+		</header>
+
+		<nav class="channel-arrows" aria-label="Channel navigation">
+			<button class="channel-arrow left-channel-arrow" id="prevChannel" type="button">&#9664;</button>
+
+			<div class="channel-center">
+				<p class="tiny-label" id="viewModeLabel">Home Feed</p>
+				<h2 id="channelName">Latest Long Videos</h2>
+				<p id="channelTagline">Newest 5+ minute videos from all Jantz TV channels.</p>
+			</div>
+
+			<button class="channel-arrow right-channel-arrow" id="nextChannel" type="button">&#9654;</button>
+		</nav>
+
+
+		<main class="main-layout">
+
+			<section class="player-panel" id="playerPanel">
+
+				<div class="tv-frame">
+					<div class="tv-screen">
+						<video id="videoPlayer" controls playsinline webkit-playsinline></video>
+						<div class="player-status hidden" id="playerStatus">Loading stream...</div>
+					</div>
+
+					<div class="tv-controls">
+						<div class="power-light"></div>
+						<span id="nowPlayingText">Pick a video buddy.</span>
+						<div class="knob"></div>
+					</div>
+				</div>
+
+				<div class="now-playing-strip">
+					<div class="now-playing-text">
+						<p class="tiny-label">Now Playing</p>
+						<h3 id="currentVideoTitle">Nothing playing yet</h3>
+						<p id="currentVideoChannel">Tap a video below to start watching in the app.</p>
+					</div>
+
+					<button id="favoriteCurrentBtn" type="button">&#9734;</button>
+				</div>
+
+				<button class="youtube-backup-btn" id="openYouTubeBtn" type="button">
+					Open on YouTube
+				</button>
+			</section>
+
+			<section class="feed-panel">
+
+				<div class="section-heading">
+					<div>
+						<p class="tiny-label">Jantz TV Feed</p>
+						<h3 id="recentVideosTitle">Latest Long Videos</h3>
+					</div>
+
+					<button class="small-btn" id="refreshBtn" type="button">Refresh</button>
+				</div>
+
+				<div class="video-list" id="recentVideos">
+					<p class="empty-message">Loading videos...</p>
+				</div>
+
+				<div class="section-heading favorites-heading">
+					<div>
+						<p class="tiny-label">Saved Locally</p>
+						<h3>Favorites</h3>
+					</div>
+
+					<button class="small-btn" id="clearFavoritesBtn" type="button">Clear</button>
+				</div>
+
+				<div class="favorites-list" id="favoritesList">
+					<p class="empty-message">No favorites yet.</p>
+				</div>
+
+				<div class="section-heading history-heading">
+					<div>
+						<p class="tiny-label">Recently Played</p>
+						<h3>Watch History</h3>
+					</div>
+
+					<button class="small-btn" id="clearHistoryBtn" type="button">Clear</button>
+				</div>
+
+				<div class="history-list" id="historyList">
+					<p class="empty-message">No watch history yet.</p>
+				</div>
+
+			</section>
+
+		</main>
+
+		<nav class="bottom-bar">
+			<button id="bottomHomeBtn" type="button">Home</button>
+			<button id="bottomGuideBtn" type="button">Guide</button>
+			<button id="bottomRandomBtn" type="button">Shuffle</button>
+			<button id="bottomFavoritesBtn" type="button">&#9733;</button>
+		</nav>
+
+	</div>
+
+	<div class="guide-overlay hidden" id="guideOverlay">
+		<div class="guide-card">
+			<div class="guide-top">
+				<div>
+					<p class="tiny-label">Channel Surfer</p>
+					<h2>Guide</h2>
+				</div>
+
+				<button id="closeGuideBtn" type="button">&#10005;</button>
+			</div>
+
+			<div class="guide-list" id="guideList"></div>
+		</div>
+	</div>
+
+	<script src="script.js?v=4"></script>
+
+	<script>
+		if ("serviceWorker" in navigator) {
+			window.addEventListener("load", function() {
+				navigator.serviceWorker.register("service-worker.js").catch(function(error) {
+					console.log("Service worker registration failed:", error);
+				});
+			});
+		}
+	</script>
+</body>
+
+</html>
